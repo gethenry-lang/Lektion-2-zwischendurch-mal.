@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio mit Wort-Highlighting und Div-Modulen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            padding-bottom: 150px;
+        }
+        .header-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .audio-player-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            text-align: center;
+        }
+        audio {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #textDisplay {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 100px;
+            font-size: 1.2em;
+            white-space: normal;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .word-pair {
+            display: inline-block;
+            margin: 0 10px 15px 0;
+            vertical-align: top;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+        .current-word {
+            background-color: #add8e6;
+            font-weight: bold;
+            border-radius: 4px;
+            padding: 2px 5px;
+        }
+        .vietnamese-word, .german-translation {
+            display: block;
+            padding: 2px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .toggle-btn, .speed-btn {
+            padding: 8px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .toggle-btn:hover, .speed-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .toggle-btn.active, .speed-btn.active {
+            background-color: #add8e6;
+            border-color: #7db8d1;
+        }
+        .player-fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid #ccc;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="Header.png" alt="Ein dekoratives Bild für den Header." class="header-image">
+
+    
+
+
+
+    
+    <div id="textDisplay">
+        <style>font-color: blue; </style>
+
+
+
+        
+<div class="word-pair" data-start-time="18400" data-end-time="18680">
+    <span class="german-translation">Ich</span>
+    <span class="vietnamese-word">Tôi</span>
+</div>
+<div class="word-pair" data-start-time="18680" data-end-time="19320">
+    <span class="german-translation">heiße</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="19320" data-end-time="19840">
+    <span class="german-translation">Esila</span>
+    <span class="vietnamese-word">Esila</span>
+</div>
+<div class="word-pair" data-start-time="19840" data-end-time="21040">
+    <span class="german-translation">Catal.</span>
+    <span class="vietnamese-word">Catal.</span>
+</div>
+<div class="word-pair" data-start-time="21720" data-end-time="21880">
+    <span class="german-translation">Ich</span>
+    <span class="vietnamese-word">Tôi</span>
+</div>
+<div class="word-pair" data-start-time="21880" data-end-time="22080">
+    <span class="german-translation">bin</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="22080" data-end-time="23280">
+    <span class="german-translation">19.</span>
+    <span class="vietnamese-word">19 tuổi.</span>
+</div>
+<div class="word-pair" data-start-time="26240" data-end-time="26760">
+    <span class="german-translation">Ich bin in</span>
+    <span class="vietnamese-word">Tôi sinh ra ở</span>
+</div>
+<div class="word-pair" data-start-time="26760" data-end-time="27040">
+    <span class="german-translation">Sankt</span>
+    <span class="vietnamese-word">Sankt</span>
+</div>
+<div class="word-pair" data-start-time="27040" data-end-time="27520">
+    <span class="german-translation">Pölten</span>
+    <span class="vietnamese-word">Pölten</span>
+</div>
+<div class="word-pair" data-start-time="27520" data-end-time="28720">
+    <span class="german-translation">geboren.</span>
+    <span class="vietnamese-word">sinh ra.</span>
+</div>
+<div class="word-pair" data-start-time="30320" data-end-time="30640">
+    <span class="german-translation">Meine</span>
+    <span class="vietnamese-word">Cha mẹ tôi</span>
+</div>
+<div class="word-pair" data-start-time="30640" data-end-time="31600">
+    <span class="german-translation">Eltern</span>
+    <span class="vietnamese-word">cha mẹ</span>
+</div>
+<div class="word-pair" data-start-time="31600" data-end-time="31880">
+    <span class="german-translation">und</span>
+    <span class="vietnamese-word">và</span>
+</div>
+<div class="word-pair" data-start-time="31880" data-end-time="32200">
+    <span class="german-translation">ich</span>
+    <span class="vietnamese-word">tôi</span>
+</div>
+<div class="word-pair" data-start-time="32200" data-end-time="32640">
+    <span class="german-translation">wohnen</span>
+    <span class="vietnamese-word">sống</span>
+</div>
+<div class="word-pair" data-start-time="32640" data-end-time="33840">
+    <span class="german-translation">in Linz.</span>
+    <span class="vietnamese-word">ở Linz.</span>
+</div>
+<div class="word-pair" data-start-time="35200" data-end-time="35320">
+    <span class="german-translation">St.</span>
+    <span class="vietnamese-word">St.</span>
+</div>
+<div class="word-pair" data-start-time="35320" data-end-time="36400">
+    <span class="german-translation">Pölten</span>
+    <span class="vietnamese-word">Pölten</span>
+</div>
+<div class="word-pair" data-start-time="36400" data-end-time="36680">
+    <span class="german-translation">und</span>
+    <span class="vietnamese-word">và</span>
+</div>
+<div class="word-pair" data-start-time="36680" data-end-time="37440">
+    <span class="german-translation">Linz</span>
+    <span class="vietnamese-word">Linz</span>
+</div>
+<div class="word-pair" data-start-time="37440" data-end-time="37720">
+    <span class="german-translation">sind</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="37720" data-end-time="38920">
+    <span class="german-translation">in Österreich.</span>
+    <span class="vietnamese-word">ở Áo.</span>
+</div>
+<div class="word-pair" data-start-time="39960" data-end-time="40080">
+    <span class="german-translation">St.</span>
+    <span class="vietnamese-word">St.</span>
+</div>
+<div class="word-pair" data-start-time="40080" data-end-time="40840">
+    <span class="german-translation">Pölten</span>
+    <span class="vietnamese-word">Pölten</span>
+</div>
+<div class="word-pair" data-start-time="40840" data-end-time="41080">
+    <span class="german-translation">ist</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="41080" data-end-time="41160">
+    <span class="german-translation">die</span>
+    <span class="vietnamese-word">thủ phủ</span>
+</div>
+<div class="word-pair" data-start-time="41160" data-end-time="42120">
+    <span class="german-translation">Landeshauptstadt</span>
+    <span class="vietnamese-word">thủ phủ</span>
+</div>
+<div class="word-pair" data-start-time="42120" data-end-time="42280">
+    <span class="german-translation">von</span>
+    <span class="vietnamese-word">của</span>
+</div>
+<div class="word-pair" data-start-time="42280" data-end-time="43480">
+    <span class="german-translation">Niederösterreich</span>
+    <span class="vietnamese-word">Niederösterreich</span>
+</div>
+<div class="word-pair" data-start-time="44200" data-end-time="44520">
+    <span class="german-translation">und</span>
+    <span class="vietnamese-word">và</span>
+</div>
+<div class="word-pair" data-start-time="44520" data-end-time="45680">
+    <span class="german-translation">Linz</span>
+    <span class="vietnamese-word">Linz</span>
+</div>
+<div class="word-pair" data-start-time="45680" data-end-time="45880">
+    <span class="german-translation">ist</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="45880" data-end-time="45960">
+    <span class="german-translation">die</span>
+    <span class="vietnamese-word">thủ phủ</span>
+</div>
+<div class="word-pair" data-start-time="45960" data-end-time="46880">
+    <span class="german-translation">Landeshauptstadt</span>
+    <span class="vietnamese-word">thủ phủ</span>
+</div>
+<div class="word-pair" data-start-time="46880" data-end-time="47120">
+    <span class="german-translation">von</span>
+    <span class="vietnamese-word">của</span>
+</div>
+<div class="word-pair" data-start-time="47120" data-end-time="48320">
+    <span class="german-translation">Oberösterreich.</span>
+    <span class="vietnamese-word">Oberösterreich.</span>
+</div>
+<div class="word-pair" data-start-time="51400" data-end-time="51960">
+    <span class="german-translation">Das ist</span>
+    <span class="vietnamese-word">Đây là</span>
+</div>
+<div class="word-pair" data-start-time="51960" data-end-time="53160">
+    <span class="german-translation">meine Familie.</span>
+    <span class="vietnamese-word">gia đình tôi.</span>
+</div>
+<div class="word-pair" data-start-time="55880" data-end-time="56520">
+    <span class="german-translation">Mein Papa</span>
+    <span class="vietnamese-word">Bố tôi</span>
+</div>
+<div class="word-pair" data-start-time="56520" data-end-time="56800">
+    <span class="german-translation">heißt</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="56800" data-end-time="58000">
+    <span class="german-translation">Zafer.</span>
+    <span class="vietnamese-word">Zafer.</span>
+</div>
+<div class="word-pair" data-start-time="58440" data-end-time="59000">
+    <span class="german-translation">Er spricht</span>
+    <span class="vietnamese-word">Ông ấy nói</span>
+</div>
+<div class="word-pair" data-start-time="59000" data-end-time="59480">
+    <span class="german-translation">sehr gut</span>
+    <span class="vietnamese-word">rất tốt</span>
+</div>
+<div class="word-pair" data-start-time="59480" data-end-time="60680">
+    <span class="german-translation">Deutsch.</span>
+    <span class="vietnamese-word">tiếng Đức.</span>
+</div>
+<div class="word-pair" data-start-time="61400" data-end-time="61720">
+    <span class="german-translation">Er ist</span>
+    <span class="vietnamese-word">Ông ấy là</span>
+</div>
+<div class="word-pair" data-start-time="61720" data-end-time="62920">
+    <span class="german-translation">Türke,</span>
+    <span class="vietnamese-word">người Thổ Nhĩ Kỳ,</span>
+</div>
+<div class="word-pair" data-start-time="63040" data-end-time="63440">
+    <span class="german-translation">aber</span>
+    <span class="vietnamese-word">nhưng</span>
+</div>
+<div class="word-pair" data-start-time="63440" data-end-time="63840">
+    <span class="german-translation">er ist</span>
+    <span class="vietnamese-word">ông ấy</span>
+</div>
+<div class="word-pair" data-start-time="63840" data-end-time="64640">
+    <span class="german-translation">in Österreich</span>
+    <span class="vietnamese-word">ở Áo</span>
+</div>
+<div class="word-pair" data-start-time="64640" data-end-time="65840">
+    <span class="german-translation">geboren.</span>
+    <span class="vietnamese-word">sinh ra.</span>
+</div>
+<div class="word-pair" data-start-time="67960" data-end-time="68280">
+    <span class="german-translation">Meine</span>
+    <span class="vietnamese-word">Ông bà tôi</span>
+</div>
+<div class="word-pair" data-start-time="68280" data-end-time="69120">
+    <span class="german-translation">Großeltern</span>
+    <span class="vietnamese-word">ông bà</span>
+</div>
+<div class="word-pair" data-start-time="69120" data-end-time="69520">
+    <span class="german-translation">kommen</span>
+    <span class="vietnamese-word">đến</span>
+</div>
+<div class="word-pair" data-start-time="69520" data-end-time="69720">
+    <span class="german-translation">aus</span>
+    <span class="vietnamese-word">từ</span>
+</div>
+<div class="word-pair" data-start-time="69720" data-end-time="69840">
+    <span class="german-translation">der</span>
+    <span class="vietnamese-word">nước</span>
+</div>
+<div class="word-pair" data-start-time="69840" data-end-time="71040">
+    <span class="german-translation">Türkei.</span>
+    <span class="vietnamese-word">Thổ Nhĩ Kỳ.</span>
+</div>
+<div class="word-pair" data-start-time="71760" data-end-time="72000">
+    <span class="german-translation">Mein</span>
+    <span class="vietnamese-word">Ông tôi</span>
+</div>
+<div class="word-pair" data-start-time="72000" data-end-time="72480">
+    <span class="german-translation">Opa</span>
+    <span class="vietnamese-word">ông</span>
+</div>
+<div class="word-pair" data-start-time="72480" data-end-time="72840">
+    <span class="german-translation">heißt</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="72840" data-end-time="74040">
+    <span class="german-translation">Berkan.</span>
+    <span class="vietnamese-word">Berkan.</span>
+</div>
+<div class="word-pair" data-start-time="74240" data-end-time="74560">
+    <span class="german-translation">Meine</span>
+    <span class="vietnamese-word">Bà tôi</span>
+</div>
+<div class="word-pair" data-start-time="74560" data-end-time="75000">
+    <span class="german-translation">Oma</span>
+    <span class="vietnamese-word">bà</span>
+</div>
+<div class="word-pair" data-start-time="75000" data-end-time="75280">
+    <span class="german-translation">heißt</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="75280" data-end-time="76480">
+    <span class="german-translation">Nilpfer.</span>
+    <span class="vietnamese-word">Nilpfer.</span>
+</div>
+<div class="word-pair" data-start-time="77280" data-end-time="77760">
+    <span class="german-translation">Oma</span>
+    <span class="vietnamese-word">Bà</span>
+</div>
+<div class="word-pair" data-start-time="77760" data-end-time="78080">
+    <span class="german-translation">und</span>
+    <span class="vietnamese-word">và</span>
+</div>
+<div class="word-pair" data-start-time="78080" data-end-time="78840">
+    <span class="german-translation">Opa</span>
+    <span class="vietnamese-word">ông</span>
+</div>
+<div class="word-pair" data-start-time="78840" data-end-time="79280">
+    <span class="german-translation">sprechen</span>
+    <span class="vietnamese-word">nói</span>
+</div>
+<div class="word-pair" data-start-time="79280" data-end-time="79560">
+    <span class="german-translation">nicht</span>
+    <span class="vietnamese-word">không</span>
+</div>
+<div class="word-pair" data-start-time="79560" data-end-time="79960">
+    <span class="german-translation">so gut</span>
+    <span class="vietnamese-word">giỏi lắm</span>
+</div>
+<div class="word-pair" data-start-time="79960" data-end-time="81160">
+    <span class="german-translation">Deutsch.</span>
+    <span class="vietnamese-word">tiếng Đức.</span>
+</div>
+<div class="word-pair" data-start-time="82960" data-end-time="83520">
+    <span class="german-translation">Sie kommen</span>
+    <span class="vietnamese-word">Họ đến</span>
+</div>
+<div class="word-pair" data-start-time="83520" data-end-time="83760">
+    <span class="german-translation">aus</span>
+    <span class="vietnamese-word">từ</span>
+</div>
+<div class="word-pair" data-start-time="83760" data-end-time="84960">
+    <span class="german-translation">Istanbul,</span>
+    <span class="vietnamese-word">Istanbul,</span>
+</div>
+<div class="word-pair" data-start-time="85280" data-end-time="85560">
+    <span class="german-translation">aber</span>
+    <span class="vietnamese-word">nhưng</span>
+</div>
+<div class="word-pair" data-start-time="85560" data-end-time="85680">
+    <span class="german-translation">sie</span>
+    <span class="vietnamese-word">họ</span>
+</div>
+<div class="word-pair" data-start-time="85680" data-end-time="86040">
+    <span class="german-translation">wohnen</span>
+    <span class="vietnamese-word">sống</span>
+</div>
+<div class="word-pair" data-start-time="86040" data-end-time="86280">
+    <span class="german-translation">schon</span>
+    <span class="vietnamese-word">đã</span>
+</div>
+<div class="word-pair" data-start-time="86280" data-end-time="86520">
+    <span class="german-translation">sehr</span>
+    <span class="vietnamese-word">rất</span>
+</div>
+<div class="word-pair" data-start-time="86520" data-end-time="86880">
+    <span class="german-translation">lange</span>
+    <span class="vietnamese-word">lâu</span>
+</div>
+<div class="word-pair" data-start-time="86880" data-end-time="87320">
+    <span class="german-translation">in St.</span>
+    <span class="vietnamese-word">ở St.</span>
+</div>
+<div class="word-pair" data-start-time="87320" data-end-time="88520">
+    <span class="german-translation">Pölten.</span>
+    <span class="vietnamese-word">Pölten.</span>
+</div>
+<div class="word-pair" data-start-time="90720" data-end-time="90960">
+    <span class="german-translation">Meine</span>
+    <span class="vietnamese-word">Mẹ tôi</span>
+</div>
+<div class="word-pair" data-start-time="90960" data-end-time="91400">
+    <span class="german-translation">Mutter</span>
+    <span class="vietnamese-word">mẹ</span>
+</div>
+<div class="word-pair" data-start-time="91400" data-end-time="91640">
+    <span class="german-translation">und</span>
+    <span class="vietnamese-word">và</span>
+</div>
+<div class="word-pair" data-start-time="91640" data-end-time="91840">
+    <span class="german-translation">ich</span>
+    <span class="vietnamese-word">tôi</span>
+</div>
+<div class="word-pair" data-start-time="91840" data-end-time="92120">
+    <span class="german-translation">sind</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="92120" data-end-time="93320">
+    <span class="german-translation">Österreicherinnen.</span>
+    <span class="vietnamese-word">người Áo.</span>
+</div>
+<div class="word-pair" data-start-time="95360" data-end-time="95680">
+    <span class="german-translation">Mama</span>
+    <span class="vietnamese-word">Mẹ</span>
+</div>
+<div class="word-pair" data-start-time="95680" data-end-time="96000">
+    <span class="german-translation">heißt</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="96000" data-end-time="97200">
+    <span class="german-translation">Silvia.</span>
+    <span class="vietnamese-word">Silvia.</span>
+</div>
+<div class="word-pair" data-start-time="97680" data-end-time="97840">
+    <span class="german-translation">Sie</span>
+    <span class="vietnamese-word">Bà ấy</span>
+</div>
+<div class="word-pair" data-start-time="97840" data-end-time="98360">
+    <span class="german-translation">kommt aus</span>
+    <span class="vietnamese-word">đến từ</span>
+</div>
+<div class="word-pair" data-start-time="98360" data-end-time="99560">
+    <span class="german-translation">Wien.</span>
+    <span class="vietnamese-word">Vienna.</span>
+</div>
+<div class="word-pair" data-start-time="101040" data-end-time="101560">
+    <span class="german-translation">Wien</span>
+    <span class="vietnamese-word">Vienna</span>
+</div>
+<div class="word-pair" data-start-time="101560" data-end-time="101800">
+    <span class="german-translation">ist</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="101800" data-end-time="101920">
+    <span class="german-translation">die</span>
+    <span class="vietnamese-word">thủ đô</span>
+</div>
+<div class="word-pair" data-start-time="101920" data-end-time="102600">
+    <span class="german-translation">Hauptstadt</span>
+    <span class="vietnamese-word">thủ đô</span>
+</div>
+<div class="word-pair" data-start-time="102600" data-end-time="102840">
+    <span class="german-translation">von</span>
+    <span class="vietnamese-word">của</span>
+</div>
+<div class="word-pair" data-start-time="102840" data-end-time="104040">
+    <span class="german-translation">Österreich.</span>
+    <span class="vietnamese-word">Áo.</span>
+</div>
+<div class="word-pair" data-start-time="105240" data-end-time="105680">
+    <span class="german-translation">Mamas</span>
+    <span class="vietnamese-word">Cha mẹ của mẹ tôi</span>
+</div>
+<div class="word-pair" data-start-time="105680" data-end-time="106680">
+    <span class="german-translation">Eltern,</span>
+    <span class="vietnamese-word">cha mẹ</span>
+</div>
+<div class="word-pair" data-start-time="106680" data-end-time="106920">
+    <span class="german-translation">also</span>
+    <span class="vietnamese-word">tức là</span>
+</div>
+<div class="word-pair" data-start-time="106920" data-end-time="107160">
+    <span class="german-translation">meine</span>
+    <span class="vietnamese-word">ông bà tôi</span>
+</div>
+<div class="word-pair" data-start-time="107160" data-end-time="108360">
+    <span class="german-translation">Großeltern,</span>
+    <span class="vietnamese-word">ông bà</span>
+</div>
+<div class="word-pair" data-start-time="108400" data-end-time="108720">
+    <span class="german-translation">leben</span>
+    <span class="vietnamese-word">sống</span>
+</div>
+<div class="word-pair" data-start-time="108720" data-end-time="109080">
+    <span class="german-translation">auch</span>
+    <span class="vietnamese-word">cũng</span>
+</div>
+<div class="word-pair" data-start-time="109080" data-end-time="110280">
+    <span class="german-translation">in Wien.</span>
+    <span class="vietnamese-word">ở Vienna.</span>
+</div>
+<div class="word-pair" data-start-time="112080" data-end-time="112280">
+    <span class="german-translation">Sie</span>
+    <span class="vietnamese-word">Họ</span>
+</div>
+<div class="word-pair" data-start-time="112280" data-end-time="112480">
+    <span class="german-translation">sind</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="112480" data-end-time="112800">
+    <span class="german-translation">nicht</span>
+    <span class="vietnamese-word">không</span>
+</div>
+<div class="word-pair" data-start-time="112800" data-end-time="113680">
+    <span class="german-translation">verheiratet.</span>
+    <span class="vietnamese-word">kết hôn.</span>
+</div>
+<div class="word-pair" data-start-time="115160" data-end-time="115400">
+    <span class="german-translation">Mein</span>
+    <span class="vietnamese-word">Ông tôi</span>
+</div>
+<div class="word-pair" data-start-time="115400" data-end-time="116080">
+    <span class="german-translation">Opa</span>
+    <span class="vietnamese-word">ông</span>
+</div>
+<div class="word-pair" data-start-time="116080" data-end-time="116400">
+    <span class="german-translation">heißt</span>
+    <span class="vietnamese-word">tên là</span>
+</div>
+<div class="word-pair" data-start-time="116400" data-end-time="116880">
+    <span class="german-translation">Walter</span>
+    <span class="vietnamese-word">Walter</span>
+</div>
+<div class="word-pair" data-start-time="116880" data-end-time="118080">
+    <span class="german-translation">Brunner.</span>
+    <span class="vietnamese-word">Brunner.</span>
+</div>
+<div class="word-pair" data-start-time="118200" data-end-time="119000">
+    <span class="german-translation">Er ist in Wien</span>
+    <span class="vietnamese-word">Ông ấy sinh ra ở Vienna</span>
+</div>
+<div class="word-pair" data-start-time="119000" data-end-time="120200">
+    <span class="german-translation">geboren.</span>
+    <span class="vietnamese-word">sinh ra.</span>
+</div>
+<div class="word-pair" data-start-time="121480" data-end-time="121720">
+    <span class="german-translation">Und</span>
+    <span class="vietnamese-word">Và</span>
+</div>
+<div class="word-pair" data-start-time="121720" data-end-time="122640">
+    <span class="german-translation">das ist</span>
+    <span class="vietnamese-word">đây là</span>
+</div>
+<div class="word-pair" data-start-time="122640" data-end-time="122960">
+    <span class="german-translation">meine</span>
+    <span class="vietnamese-word">bà tôi</span>
+</div>
+<div class="word-pair" data-start-time="122960" data-end-time="124160">
+    <span class="german-translation">Oma.</span>
+    <span class="vietnamese-word">bà.</span>
+</div>
+<div class="word-pair" data-start-time="125120" data-end-time="125520">
+    <span class="german-translation">Sie heißt</span>
+    <span class="vietnamese-word">Tên bà ấy là</span>
+</div>
+<div class="word-pair" data-start-time="125520" data-end-time="126160">
+    <span class="german-translation">Christina</span>
+    <span class="vietnamese-word">Christina</span>
+</div>
+<div class="word-pair" data-start-time="126160" data-end-time="127360">
+    <span class="german-translation">Papp.</span>
+    <span class="vietnamese-word">Papp.</span>
+</div>
+<div class="word-pair" data-start-time="129280" data-end-time="129480">
+    <span class="german-translation">Sie</span>
+    <span class="vietnamese-word">Bà ấy</span>
+</div>
+<div class="word-pair" data-start-time="129480" data-end-time="129800">
+    <span class="german-translation">kommt</span>
+    <span class="vietnamese-word">đến từ</span>
+</div>
+<div class="word-pair" data-start-time="129800" data-end-time="129960">
+    <span class="german-translation">aus</span>
+    <span class="vietnamese-word">từ</span>
+</div>
+<div class="word-pair" data-start-time="129960" data-end-time="131160">
+    <span class="german-translation">Sopron.</span>
+    <span class="vietnamese-word">Sopron.</span>
+</div>
+<div class="word-pair" data-start-time="131520" data-end-time="131880">
+    <span class="german-translation">Sie ist</span>
+    <span class="vietnamese-word">Bà ấy là</span>
+</div>
+<div class="word-pair" data-start-time="131880" data-end-time="133080">
+    <span class="german-translation">Ungarin.</span>
+    <span class="vietnamese-word">người Hungary.</span>
+</div>
+<div class="word-pair" data-start-time="134240" data-end-time="135360">
+    <span class="german-translation">Tja,</span>
+    <span class="vietnamese-word">Ừ thì,</span>
+</div>
+<div class="word-pair" data-start-time="135360" data-end-time="135880">
+    <span class="german-translation">das ist</span>
+    <span class="vietnamese-word">đây là</span>
+</div>
+<div class="word-pair" data-start-time="135880" data-end-time="136160">
+    <span class="german-translation">meine</span>
+    <span class="vietnamese-word">gia đình tôi</span>
+</div>
+<div class="word-pair" data-start-time="136160" data-end-time="137360">
+    <span class="german-translation">Familie.</span>
+    <span class="vietnamese-word">gia đình.</span>
+</div>
+<div class="word-pair" data-start-time="137880" data-end-time="138360">
+    <span class="german-translation">Wir leben</span>
+    <span class="vietnamese-word">Chúng tôi sống</span>
+</div>
+<div class="word-pair" data-start-time="138360" data-end-time="139560">
+    <span class="german-translation">in Österreich.</span>
+    <span class="vietnamese-word">ở Áo.</span>
+</div>
+<div class="word-pair" data-start-time="139800" data-end-time="140080">
+    <span class="german-translation">Aber</span>
+    <span class="vietnamese-word">Nhưng</span>
+</div>
+<div class="word-pair" data-start-time="140080" data-end-time="140280">
+    <span class="german-translation">wir</span>
+    <span class="vietnamese-word">chúng tôi</span>
+</div>
+<div class="word-pair" data-start-time="140280" data-end-time="140560">
+    <span class="german-translation">sind</span>
+    <span class="vietnamese-word">là</span>
+</div>
+<div class="word-pair" data-start-time="140560" data-end-time="141640">
+    <span class="german-translation">international.</span>
+    <span class="vietnamese-word">quốc tế.</span>
+</div>
+
+
+
+
+
+        
+        <div class="player-fixed-bottom">
+        <audio id="audioPlayer" controls>
+            <source src="My_Audio2.mp3" type="audio/mpeg">
+            Ihr Browser unterstützt das Audio-Element nicht.
+        </audio>
+        <div class="player-controls">
+            <button id="toggleVietnamese" class="toggle-btn active">Vietnamesisch an/aus</button>
+            <button id="toggleGerman" class="toggle-btn active">Deutsch an/aus</button>
+            <button class="speed-btn" data-speed="0.5">0.5x</button>
+            <button class="speed-btn" data-speed="1.0">1.0x</button>
+            <button class="speed-btn" data-speed="1.5">1.5x</button>
+            <button class="speed-btn" data-speed="2.0">2.0x</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const toggleVietnameseBtn = document.getElementById('toggleVietnamese');
+            const toggleGermanBtn = document.getElementById('toggleGerman');
+            const vietnameseWords = document.querySelectorAll('.vietnamese-word');
+            const germanWords = document.querySelectorAll('.german-translation');
+            const wordPairs = document.querySelectorAll('.word-pair');
+            const speedButtons = document.querySelectorAll('.speed-btn');
+
+            let lastHighlightedWord = null;
+
+            function toggleWords(elements, button) {
+                const isActive = button.classList.toggle('active');
+                elements.forEach(el => {
+                    el.classList.toggle('hidden', !isActive);
+                });
+            }
+
+            toggleVietnameseBtn.addEventListener('click', () => {
+                toggleWords(vietnameseWords, toggleVietnameseBtn);
+            });
+
+            toggleGermanBtn.addEventListener('click', () => {
+                toggleWords(germanWords, toggleGermanBtn);
+            });
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                const currentTime = audioPlayer.currentTime * 1000;
+                
+                let found = false;
+                wordPairs.forEach(pair => {
+                    const startTime = parseInt(pair.dataset.startTime, 10);
+                    const endTime = parseInt(pair.dataset.endTime, 10);
+
+                    if (currentTime >= startTime && currentTime <= endTime) {
+                        if (lastHighlightedWord !== pair) {
+                            if (lastHighlightedWord) {
+                                lastHighlightedWord.classList.remove('current-word');
+                            }
+                            pair.classList.add('current-word');
+                            lastHighlightedWord = pair;
+                            pair.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        found = true;
+                    }
+                });
+
+                if (!found && lastHighlightedWord) {
+                    lastHighlightedWord.classList.remove('current-word');
+                    lastHighlightedWord = null;
+                }
+            });
+
+            speedButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const speed = parseFloat(button.dataset.speed);
+                    audioPlayer.playbackRate = speed;
+                    
+                    speedButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                });
+            });
+
+            audioPlayer.playbackRate = 1.0;
+            const defaultSpeedButton = document.querySelector('.speed-btn[data-speed="1.0"]');
+            if (defaultSpeedButton) {
+                defaultSpeedButton.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
